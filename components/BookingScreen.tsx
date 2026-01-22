@@ -212,7 +212,10 @@ const BookingScreen: React.FC<BookingScreenProps> = ({ stylist, serviceName, ser
       </div>
 
       {/* Footer Action */}
-      <div className="p-4 bg-white border-t border-gray-100">
+      {/*<div className="p-4 bg-white border-t border-gray-100">*/}
+
+        <div className="fixed bottom-16 left-0 right-0 z-40 bg-white border-t border-gray-100 p-4">
+
         <button 
             onClick={handleBook}
             disabled={!selectedDate || !selectedTime}
