@@ -15,7 +15,9 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentScreen, navigateTo }) => {
   ];
 
   return (
-    <nav className="border-t border-gray-200 p-2 flex justify-around bg-white">
+    // <nav className="border-t border-gray-200 p-2 flex justify-around bg-white">
+
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white flex justify-around py-2">
       {navItems.map((item) => {
         const isActive = currentScreen === item.screen;
         return (
