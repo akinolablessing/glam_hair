@@ -1,44 +1,108 @@
 
-import React from 'react';
+import React, {useState} from 'react';
 import { ChevronLeftIcon } from './Icons';
+import {User} from "@/types.ts";
 
 interface SubScreenProps {
   onBack: () => void;
 }
 
-export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ onBack }) => (
-  <div className="h-full flex flex-col bg-white animate-in slide-in-from-right duration-300">
-     <header className="p-4 flex items-center border-b border-gray-100 sticky top-0 bg-white z-10">
-        <button onClick={onBack} className="mr-4 p-2 hover:bg-gray-50 rounded-full transition"><ChevronLeftIcon className="w-6 h-6 text-gray-600" /></button>
-        <h1 className="text-lg font-bold text-gray-800">Account Settings</h1>
-     </header>
-     <div className="p-6 space-y-5 flex-grow overflow-y-auto">
-        <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 block">Full Name</label>
-            <input type="text" defaultValue="Beauty Lover" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition" />
+interface AccountSettingsProps {
+    user: User;
+    onUpdateUser: (updates: Partial<User>) => void;
+    onBack: () => void;
+}
+
+
+export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateUser,onBack }) => {
+
+
+    const [profile, setProfile] = useState({
+        fullName: user.name,
+        email: user.email,
+        phone: user.phone,
+        currentPassword: '',
+        newPassword: '',
+    });
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = e.target;
+        setProfile(prev => ({...prev, [name]: value}));
+    };
+
+    const handleSave = () => {
+        onUpdateUser({
+            name: profile.fullName,
+            email: profile.email,
+            phone: profile.phone,
+        });
+
+        onBack();
+    };
+    return(
+    <div className="h-full flex flex-col bg-white animate-in slide-in-from-right duration-300">
+        <header className="p-4 flex items-center border-b border-gray-100 sticky top-0 bg-white z-10">
+            <button onClick={onBack} className="mr-4 p-2 hover:bg-gray-50 rounded-full transition"><ChevronLeftIcon
+                className="w-6 h-6 text-gray-600"/></button>
+            <h1 className="text-lg font-bold text-gray-800">Account Settings</h1>
+        </header>
+        <div className="p-6 space-y-5 flex-grow overflow-y-auto">
+            <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 block">{user.name}</label>
+                <input
+                    type="text"
+                    name="fullName"
+                    value={profile.fullName}
+                    onChange={handleChange}
+                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition"/>
+            </div>
+            <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 block">Email</label>
+                <input
+                    type="email"
+                    name="email"
+                    value={profile.email}
+                    onChange={handleChange}
+                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition"/>
+            </div>
+            <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 block">Phone</label>
+                <input
+                    type="tel"
+                    name="phone"
+                    value={profile.phone}
+                    onChange={handleChange}
+                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition"/>
+            </div>
+
+            <div className="pt-4">
+                <h3 className="text-sm font-bold text-gray-800 mb-3">Change Password</h3>
+                <div className="space-y-3">
+                    <input
+                        type="password"
+                        name="currentPassword"
+                        value={profile.currentPassword}
+                        onChange={handleChange}
+                        placeholder="Current Password"
+                        className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition text-sm"/>
+                    <input
+                        type="password"
+                        name="newPassword"
+                        value={profile.newPassword}
+                        onChange={handleChange}
+                        placeholder="New Password"
+                        className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition text-sm"/>
+                </div>
+            </div>
         </div>
-        <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 block">Email</label>
-            <input type="email" defaultValue="user@example.com" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition" />
+        <div className="p-4 border-t border-gray-100 sticky bottom-0 bg-white">
+            <button
+                onClick={handleSave}
+                className="w-full bg-brand-pink-500 text-white font-bold py-3.5 rounded-xl shadow-md hover:bg-brand-pink-600 transition active:scale-[0.98]">Save
+                Changes
+            </button>
         </div>
-        <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 block">Phone</label>
-            <input type="tel" defaultValue="+1 (555) 123-4567" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition" />
-        </div>
-        
-        <div className="pt-4">
-             <h3 className="text-sm font-bold text-gray-800 mb-3">Change Password</h3>
-             <div className="space-y-3">
-                <input type="password" placeholder="Current Password" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition text-sm" />
-                <input type="password" placeholder="New Password" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition text-sm" />
-             </div>
-        </div>
-     </div>
-     <div className="p-4 border-t border-gray-100">
-        <button onClick={onBack} className="w-full bg-brand-pink-500 text-white font-bold py-3.5 rounded-xl shadow-md hover:bg-brand-pink-600 transition active:scale-[0.98]">Save Changes</button>
-     </div>
-  </div>
-);
+    </div>
+    )};
 
 export const PaymentMethodsScreen: React.FC<SubScreenProps> = ({ onBack }) => (
   <div className="h-full flex flex-col bg-white animate-in slide-in-from-right duration-300">

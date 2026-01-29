@@ -19,11 +19,16 @@ const App: React.FC = () => {
   const [bookingService, setBookingService] = useState<{ name: string, price: number } | null>(null);
   
   // User State
-  const [user, setUser] = useState<User>({
-    name: 'Jasmine',
-    email: 'user@example.com',
-    avatarUrl: 'https://picsum.photos/200/200'
-  });
+    const [user, setUser] = useState<User>({
+        name: 'Beauty Lover',
+        email: 'user@example.com',
+        phone: '+1 (555) 123-4567',
+        avatarUrl: '/avatar.png',
+    });
+
+    const handleUpdateUser = (updates: Partial<User>) => {
+        setUser(prev => ({ ...prev, ...updates }));
+    };
   
   const [bookings, setBookings] = useState<Booking[]>([
       {
@@ -88,9 +93,9 @@ const App: React.FC = () => {
       navigateTo(Screen.WELCOME);
   };
 
-  const handleUpdateUser = (updates: Partial<User>) => {
-      setUser(prev => ({ ...prev, ...updates }));
-  };
+  // const handleUpdateUser = (updates: Partial<User>) => {
+  //     setUser(prev => ({ ...prev, ...updates }));
+  // };
 
   return (
     <div className="h-full w-full font-sans text-gray-900">
@@ -151,21 +156,39 @@ const App: React.FC = () => {
           />
       )}
 
-      {currentScreen === Screen.PROFILE && (
-          <ProfileScreen
-            user={user}
-            onUpdateUser={handleUpdateUser}
-            navigateTo={navigateTo}
-            currentScreen={currentScreen}
-            onLogout={handleLogout}
-          />
-      )}
+      {/*{currentScreen === Screen.PROFILE && (*/}
+      {/*    <ProfileScreen*/}
+      {/*      user={user}*/}
+      {/*      onUpdateUser={handleUpdateUser}*/}
+      {/*      navigateTo={navigateTo}*/}
+      {/*      currentScreen={currentScreen}*/}
+      {/*      onLogout={handleLogout}*/}
+      {/*    />*/}
+      {/*)}*/}
 
-      {currentScreen === Screen.PROFILE_SETTINGS && (
-          <AccountSettingsScreen onBack={() => navigateTo(Screen.PROFILE)} />
-      )}
+      {/*{currentScreen === Screen.PROFILE_SETTINGS && (*/}
+      {/*    <AccountSettingsScreen onBack={() => navigateTo(Screen.PROFILE)} />*/}
+      {/*)}*/}
+        {currentScreen === Screen.PROFILE && (
+            <ProfileScreen
+                user={user}
+                onUpdateUser={handleUpdateUser}
+                navigateTo={navigateTo}
+                currentScreen={currentScreen}
+                oonLogout={handleLogout}
+            />
+        )}
 
-      {currentScreen === Screen.PROFILE_PAYMENTS && (
+        {currentScreen === Screen.PROFILE_SETTINGS && (
+            <AccountSettingsScreen
+                user={user}
+                onUpdateUser={handleUpdateUser}
+                onBack={() => navigateTo(Screen.PROFILE)}
+            />
+        )}
+
+
+        {currentScreen === Screen.PROFILE_PAYMENTS && (
           <PaymentMethodsScreen onBack={() => navigateTo(Screen.PROFILE)} />
       )}
 
