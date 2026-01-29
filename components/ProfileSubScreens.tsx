@@ -46,8 +46,8 @@ export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateU
             <h1 className="text-lg font-bold text-gray-800">Account Settings</h1>
         </header>
         {/*<div className="p-6 space-y-5 flex-grow overflow-y-auto">*/}
-        <div className="p-6 space-y-5 flex-grow overflow-y-auto pb-28">
-
+        {/*<div className="p-6 space-y-5 flex-grow overflow-y-auto pb-28">*/}
+        <div className="flex-1 overflow-y-auto p-6 space-y-5">
         <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 block">{user.name}</label>
                 <input
@@ -97,7 +97,8 @@ export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateU
             </div>
         </div>
         {/*<div className="p-4 border-t border-gray-100 sticky bottom-0 bg-white">*/}
-        <div className="p-4 border-t border-gray-100 sticky bottom-0 bg-white pb-[calc(1rem+env(safe-area-inset-bottom))]">
+        {/*<div className="p-4 border-t border-gray-100 sticky bottom-0 bg-white pb-[calc(1rem+env(safe-area-inset-bottom))]">*/}
+        <div className="p-4 border-t border-gray-100 bg-white pb-[calc(1rem+env(safe-area-inset-bottom))]">
 
         <button
                 onClick={handleSave}
