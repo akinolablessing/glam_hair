@@ -13,6 +13,8 @@ interface ProfileScreenProps {
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onUpdateUser, navigateTo, currentScreen, onLogout }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [showImagePreview, setShowImagePreview] = React.useState(false);
+
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -35,9 +37,22 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onUpdateUser, navig
         <div className="h-full flex flex-col bg-gray-50">
             <div className="bg-white pb-8 pt-12 px-6 rounded-b-[3rem] shadow-sm mb-6">
                 <div className="flex flex-col items-center">
-                     <div className="w-24 h-24 rounded-full bg-brand-pink-100 p-1 mb-4 relative group cursor-pointer" onClick={triggerFileInput}>
-                        <img src={user.avatarUrl} alt="Profile" className="w-full h-full rounded-full object-cover border-2 border-white" />
-                        <button className="absolute bottom-0 right-0 bg-brand-pink-500 text-white p-1.5 rounded-full border-2 border-white group-hover:bg-brand-pink-600 transition shadow-sm">
+                     {/*<div className="w-24 h-24 rounded-full bg-brand-pink-100 p-1 mb-4 relative group cursor-pointer" onClick={triggerFileInput}>*/}
+                    <div
+                        className="w-24 h-24 rounded-full bg-brand-pink-100 p-1 mb-4 relative group cursor-pointer"
+                        onClick={() => setShowImagePreview(true)}
+                    >
+
+                    <img src={user.avatarUrl} alt="Profile" className="w-full h-full rounded-full object-cover border-2 border-white" />
+                        {/*<button className="absolute bottom-0 right-0 bg-brand-pink-500 text-white p-1.5 rounded-full border-2 border-white group-hover:bg-brand-pink-600 transition shadow-sm">*/}
+
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                triggerFileInput();
+                            }}
+                            className="absolute bottom-0 right-0 bg-brand-pink-500 text-white p-1.5 rounded-full border-2 border-white group-hover:bg-brand-pink-600 transition shadow-sm"
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
                                 <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
                                 <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
@@ -52,7 +67,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onUpdateUser, navig
                         />
                      </div>
                      <h1 className="text-xl font-bold text-gray-800">{user.name}</h1>
-                     <p className="text-gray-500 text-sm">New York, NY</p>
+                     <p className="text-gray-500 text-sm">{user.email}</p>
                 </div>
                 <div className="flex justify-center space-x-8 mt-6">
                     <div className="text-center">
@@ -130,6 +145,26 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onUpdateUser, navig
                     </div>
                 </button>
             </div>
+            {showImagePreview && (
+                <div
+                    className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center"
+                    onClick={() => setShowImagePreview(false)}
+                >
+                    <img
+                        src={user.avatarUrl}
+                        alt="Profile Preview"
+                        className="max-w-[90%] max-h-[90%] rounded-2xl shadow-2xl"
+                    />
+
+                    <button
+                        className="absolute top-6 right-6 text-white text-2xl"
+                        onClick={() => setShowImagePreview(false)}
+                    >
+                        ✕
+                    </button>
+                </div>
+            )}
+
 
             <BottomNav currentScreen={currentScreen} navigateTo={navigateTo} />
         </div>

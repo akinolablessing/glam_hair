@@ -94,8 +94,10 @@ export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateU
                 </div>
             </div>
         </div>
-        <div className="p-4 border-t border-gray-100 sticky bottom-0 bg-white">
-            <button
+        {/*<div className="p-4 border-t border-gray-100 sticky bottom-0 bg-white">*/}
+        <div className="p-4 border-t border-gray-100 sticky bottom-0 bg-white pb-[calc(1rem+env(safe-area-inset-bottom))]">
+
+        <button
                 onClick={handleSave}
                 className="w-full bg-brand-pink-500 text-white font-bold py-3.5 rounded-xl shadow-md hover:bg-brand-pink-600 transition active:scale-[0.98]">Save
                 Changes
