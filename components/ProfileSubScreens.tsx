@@ -16,6 +16,32 @@ interface AccountSettingsProps {
 
 export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateUser,onBack }) => {
 
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    const validate = () => {
+        const newErrors: Record<string, string> = {};
+
+        if (!profile.fullName.trim()) {
+            newErrors.fullName = "Full name is required";
+        }
+
+        if (!profile.email.trim()) {
+            newErrors.email = "Email is required";
+        } else if (!/^\S+@\S+\.\S+$/.test(profile.email)) {
+            newErrors.email = "Enter a valid email address";
+        }
+
+        if (!profile.phone.trim()) {
+            newErrors.phone = "Phone number is required";
+        }
+
+        if (profile.newPassword && profile.newPassword.length < 6) {
+            newErrors.newPassword = "Password must be at least 6 characters";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const [profile, setProfile] = useState({
         fullName: user.name,
@@ -29,7 +55,18 @@ export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateU
         setProfile(prev => ({...prev, [name]: value}));
     };
 
+    // const handleSave = () => {
+    //     onUpdateUser({
+    //         name: profile.fullName,
+    //         email: profile.email,
+    //         phone: profile.phone,
+    //     });
+    //
+    //     onBack();
+    // };
     const handleSave = () => {
+        if (!validate()) return;
+
         onUpdateUser({
             name: profile.fullName,
             email: profile.email,
@@ -38,6 +75,7 @@ export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateU
 
         onBack();
     };
+
     return(
     <div className="h-full flex flex-col bg-white animate-in slide-in-from-right duration-300">
         <header className="p-4 flex items-center border-b border-gray-100 sticky top-0 bg-white z-10">
@@ -56,7 +94,15 @@ export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateU
                     name="fullName"
                     value={profile.fullName}
                     onChange={handleChange}
-                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition"/>
+                    className={`w-full p-3 rounded-xl border transition focus:outline-none focus:ring-2
+    ${errors.fullName
+                        ? "border-red-400 bg-red-50 focus:ring-red-200"
+                        : "border-gray-200 bg-gray-50 focus:ring-brand-pink-200"}
+  `}
+                />
+            {errors.fullName && (
+                <p className="text-xs text-red-500 mt-1">{errors.fullName}</p>
+            )}
             </div>
             <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 block">Email</label>
@@ -65,7 +111,15 @@ export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateU
                     name="email"
                     value={profile.email}
                     onChange={handleChange}
-                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition"/>
+                    className={`w-full p-3 rounded-xl border transition focus:outline-none focus:ring-2
+    ${errors.email
+                        ? "border-red-400 bg-red-50 focus:ring-red-200"
+                        : "border-gray-200 bg-gray-50 focus:ring-brand-pink-200"}
+  `}
+                />
+                {errors.email && (
+                    <p className="text-xs text-red-500 mt-1">{errors.email}</p>
+                )}
             </div>
             <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 block">Phone</label>
@@ -74,7 +128,15 @@ export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateU
                     name="phone"
                     value={profile.phone}
                     onChange={handleChange}
-                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition"/>
+                    className={`w-full p-3 rounded-xl border transition focus:outline-none focus:ring-2
+    ${errors.phone
+                        ? "border-red-400 bg-red-50 focus:ring-red-200"
+                        : "border-gray-200 bg-gray-50 focus:ring-brand-pink-200"}
+  `}
+                />
+                {errors.phone && (
+                    <p className="text-xs text-red-500 mt-1">{errors.phone}</p>
+                )}
             </div>
 
             <div className="pt-4">
@@ -94,6 +156,10 @@ export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateU
                         onChange={handleChange}
                         placeholder="New Password"
                         className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-200 transition text-sm"/>
+                    {errors.newPassword && (
+                        <p className="text-xs text-red-500 mt-1">{errors.newPassword}</p>
+                    )}
+
                 </div>
             </div>
             <div className="p-4 border-t border-gray-100 bg-white">
