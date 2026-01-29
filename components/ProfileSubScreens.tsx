@@ -46,7 +46,7 @@ export const AccountSettingsScreen: React.FC<SubScreenProps> = ({ user,onUpdateU
             <h1 className="text-lg font-bold text-gray-800">Account Settings</h1>
         </header>
         {/*<div className="p-6 space-y-5 flex-grow overflow-y-auto">*/}
-        <div className="p-6 space-y-5 flex-grow overflow-y-auto pb-24">
+        <div className="p-6 space-y-5 flex-grow overflow-y-auto pb-28">
 
         <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 block">{user.name}</label>
