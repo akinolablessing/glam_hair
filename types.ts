@@ -46,16 +46,24 @@ export interface Booking {
   id: string;
   stylistId: string;
   stylistName: string;
-  stylistImage: string;
+  stylistImage?: string;
+  customerName?: string;
   serviceName: string;
   price: number;
-  date: Date;
+  date: string; // ISO or readable string
   time: string;
-  status: 'upcoming' | 'completed' | 'cancelled';
+  status?: 'upcoming' | 'completed' | 'cancelled';
 }
+
 
 export interface User {
   name: string;
   email: string;
   avatarUrl: string;
+}
+interface StylistDashboardProps {
+  userName: string;
+  stylistId: string;
+  bookings: Booking[];
+  onLogout: () => void;
 }

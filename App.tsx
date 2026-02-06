@@ -14,11 +14,84 @@ import StylistDashboard from './components/StylistDashboard';
 
 const App: React.FC = () => {
   // Start at WELCOME screen
-  const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.WELCOME);
+
+    const [bookings, setBookings] = useState<Booking[]>([]);
+    const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.HOME);
+  // const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.WELCOME);
   const [selectedStylist, setSelectedStylist] = useState<Stylist | null>(null);
   const [bookingService, setBookingService] = useState<{ name: string, price: number } | null>(null);
-  
-  // User State
+
+    // const [bookings, setBookings] = useState<Booking[]>([]);
+
+    // const handleConfirmBooking = (
+    //     stylist: Stylist,
+    //     serviceName: string,
+    //     servicePrice: number,
+    //     date: Date,
+    //     time: string
+    // ) => {
+    //     const newBooking: Booking = {
+    //         id: Date.now().toString(),
+    //         stylistId: stylist.id,
+    //         stylistName: stylist.name,
+    //         customerName: 'Blessing', // later from auth
+    //         serviceName,
+    //         price: servicePrice,
+    //         date: date.toDateString(),
+    //         time,
+    //         status: 'upcoming', // ✅ REQUIRED
+    //     };
+
+    //     setBookings(prev => [...prev, newBooking]);
+    //
+    //     sendWhatsAppToStylist(newBooking);
+    // };
+
+    // const handleConfirmBooking = (
+    //     stylist: Stylist,
+    //     serviceName: string,
+    //     servicePrice: number,
+    //     date: Date,
+    //     time: string,
+    //     status: 'upcoming' | 'completed' | 'cancelled'
+    // ) => {
+    //     const newBooking: Booking = {
+    //         id: Date.now().toString(),
+    //         stylistId: stylist.id,
+    //         stylistName: stylist.name,
+    //         customerName: 'Blessing',
+    //         serviceName,
+    //         price: servicePrice,
+    //         date: date.toDateString(),
+    //         time,
+    //         status,
+    //     };
+    //
+    //     setBookings(prev => [...prev, newBooking]);
+    //
+    //     // sendWhatsAppToStylist(newBooking);
+    // };
+
+    const handleConfirmBooking = (date: Date, time: string) => {
+        if (!selectedStylist || !bookingService) return;
+
+        const newBooking: Booking = {
+            id: crypto.randomUUID(),
+            stylistName: selectedStylist.name,
+            stylistImage: selectedStylist.image,
+            serviceName: bookingService.name,
+            price: bookingService.price,
+            date,
+            time,
+            status: 'upcoming',
+        };
+
+        setBookings(prev => [...prev, newBooking]);
+        setCurrentScreen(Screen.BOOKINGS_LIST);
+    };
+
+
+    // User State
     const [user, setUser] = useState<User>({
         name: 'Beauty Lover',
         email: 'user@example.com',
@@ -30,19 +103,7 @@ const App: React.FC = () => {
         setUser(prev => ({ ...prev, ...updates }));
     };
   
-  const [bookings, setBookings] = useState<Booking[]>([
-      {
-          id: 'b0',
-          stylistId: '1',
-          stylistName: 'Elena Rodriguez',
-          stylistImage: 'https://picsum.photos/400/400?random=1',
-          serviceName: 'Balayage',
-          price: 200,
-          date: new Date(Date.now() - 86400000 * 2), // 2 days ago
-          time: '02:00 PM',
-          status: 'completed'
-      }
-  ]);
+
   
   // Mock favorites (IDs 1 and 3)
   const [favorites] = useState<Stylist[]>([DUMMY_STYLISTS[0], DUMMY_STYLISTS[2]]);
@@ -67,25 +128,25 @@ const App: React.FC = () => {
     setCurrentScreen(Screen.BOOKING_CALENDAR);
   };
 
-  const handleConfirmBooking = (date: Date, time: string) => {
-      if (!selectedStylist || !bookingService) return;
-
-      const newBooking: Booking = {
-          id: `b${Date.now()}`,
-          stylistId: selectedStylist.id,
-          stylistName: selectedStylist.name,
-          stylistImage: selectedStylist.imageUrl,
-          serviceName: bookingService.name,
-          price: bookingService.price,
-          date: date,
-          time: time,
-          status: 'upcoming'
-      };
-
-      setBookings(prev => [newBooking, ...prev]);
-      setCurrentScreen(Screen.BOOKINGS_LIST);
-      // alert(`Booking confirmed with ${selectedStylist.name} on ${date.toLocaleDateString()} at ${time}!`);
-  };
+  // const handleConfirmBooking = (date: Date, time: string) => {
+  //     if (!selectedStylist || !bookingService) return;
+  //
+  //     const newBooking: Booking = {
+  //         id: `b${Date.now()}`,
+  //         stylistId: selectedStylist.id,
+  //         stylistName: selectedStylist.name,
+  //         stylistImage: selectedStylist.imageUrl,
+  //         serviceName: bookingService.name,
+  //         price: bookingService.price,
+  //         date: date,
+  //         time: time,
+  //         status: 'upcoming'
+  //     };
+  //
+  //     setBookings(prev => [newBooking, ...prev]);
+  //     setCurrentScreen(Screen.BOOKINGS_LIST);
+  //     // alert(`Booking confirmed with ${selectedStylist.name} on ${date.toLocaleDateString()} at ${time}!`);
+  // };
 
   const handleLogout = () => {
       // In a real app, this would clear auth tokens
@@ -130,13 +191,39 @@ const App: React.FC = () => {
       )}
 
       {currentScreen === Screen.BOOKING_CALENDAR && selectedStylist && bookingService && (
-        <BookingScreen 
-            stylist={selectedStylist}
-            serviceName={bookingService.name}
-            servicePrice={bookingService.price}
-            onBack={() => setCurrentScreen(Screen.STYLIST_DETAILS)}
-            onConfirmBooking={handleConfirmBooking}
-        />
+        // <BookingScreen
+        //     stylist={selectedStylist}
+        //     serviceName={bookingService.name}
+        //     servicePrice={bookingService.price}
+        //     onBack={() => setCurrentScreen(Screen.STYLIST_DETAILS)}
+        //     onConfirmBooking={handleConfirmBooking}
+        // />
+
+          // <BookingScreen
+          //     stylist={selectedStylist}
+          //     serviceName={bookingService.name}
+          //     servicePrice={bookingService.price}
+          //     onBack={goBack}
+          //     onConfirmBooking={(date, time) =>
+          //         handleConfirmBooking(
+          //             selectedStylist,
+          //             bookingService.name,
+          //             bookingService.price,
+          //             date,
+          //             time,
+          //             'upcoming' // ✅ status added here
+          //         )
+          //     }
+          // />
+
+          <BookingScreen
+              stylist={selectedStylist}
+              serviceName={bookingService.name}
+              servicePrice={bookingService.price}
+              onBack={() => setCurrentScreen(Screen.STYLIST_DETAILS)}
+              onConfirmBooking={handleConfirmBooking}
+          />
+
       )}
 
       {currentScreen === Screen.BOOKINGS_LIST && (
@@ -170,13 +257,22 @@ const App: React.FC = () => {
       {/*    <AccountSettingsScreen onBack={() => navigateTo(Screen.PROFILE)} />*/}
       {/*)}*/}
         {currentScreen === Screen.PROFILE && (
+            // <ProfileScreen
+            //     user={user}
+            //     onUpdateUser={handleUpdateUser}
+            //     navigateTo={navigateTo}
+            //     currentScreen={currentScreen}
+            //     oonLogout={handleLogout}
+            // />
+
             <ProfileScreen
                 user={user}
                 onUpdateUser={handleUpdateUser}
                 navigateTo={navigateTo}
                 currentScreen={currentScreen}
-                oonLogout={handleLogout}
+                onLogout={handleLogout}
             />
+
         )}
 
         {currentScreen === Screen.PROFILE_SETTINGS && (

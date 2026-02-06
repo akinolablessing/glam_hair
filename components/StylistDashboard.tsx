@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
 import { PlusIcon, TrashIcon, ClockIcon, CurrencyDollarIcon } from './Icons';
+import {Booking} from "@/types.ts";
+
+// interface StylistDashboardProps {
+//   userName: string;
+//   onLogout: () => void;
+// }
 
 interface StylistDashboardProps {
-  userName: string;
-  onLogout: () => void;
+    userName: string;
+    stylistId: string;
+    bookings: Booking[];
+    onLogout: () => void;
 }
+
 
 interface ServiceItem {
   id: string;
@@ -20,15 +29,30 @@ interface DayAvailability {
   end: string;
 }
 
-const StylistDashboard: React.FC<StylistDashboardProps> = ({ userName, onLogout }) => {
-  const [activeTab, setActiveTab] = useState('Bookings');
+const StylistDashboard: React.FC<StylistDashboardProps> = ({ userName,stylistId, onLogout }) => {
+
+
+    const bookings = [
+        { id: 1, stylistId: '123', service: 'Classic Haircut', client: 'Amy Smith', time: 'Today, 2:00 PM', location: '123 Blossom Lane', status: 'upcoming' },
+        { id: 2, stylistId: '123', service: 'Full Color', client: 'Jessica Wu', time: 'Tomorrow, 10:00 AM', location: '456 Style Avenue', status: 'upcoming' }
+    ];
+
+
+    const stylistBookings = bookings.filter(
+        booking =>
+            booking.stylistId === stylistId &&
+            booking.status === 'upcoming'
+    );
+
+
+
+    const [activeTab, setActiveTab] = useState('Bookings');
+
+
   const tabs = ['Bookings', 'Earnings', 'Services', 'Availability'];
 
   // Mock Data: Bookings
-  const bookings = [
-    { id: 1, service: 'Classic Haircut', client: 'Amy Smith', time: 'Today, 2:00 PM', location: '123 Blossom Lane' },
-    { id: 2, service: 'Full Color', client: 'Jessica Wu', time: 'Tomorrow, 10:00 AM', location: '456 Style Avenue' }
-  ];
+
 
   // State: Services
   const [services, setServices] = useState<ServiceItem[]>([
