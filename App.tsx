@@ -72,11 +72,30 @@ const App: React.FC = () => {
     //     // sendWhatsAppToStylist(newBooking);
     // };
 
+    // const handleConfirmBooking = (date: Date, time: string) => {
+    //     if (!selectedStylist || !bookingService) return;
+    //
+    //     const newBooking: Booking = {
+    //         id: crypto.randomUUID(),
+    //         stylistName: selectedStylist.name,
+    //         stylistImage: selectedStylist.image,
+    //         serviceName: bookingService.name,
+    //         price: bookingService.price,
+    //         date,
+    //         time,
+    //         status: 'upcoming',
+    //     };
+    //
+    //     setBookings(prev => [...prev, newBooking]);
+    //     setCurrentScreen(Screen.BOOKINGS_LIST);
+    // };
+
     const handleConfirmBooking = (date: Date, time: string) => {
         if (!selectedStylist || !bookingService) return;
 
         const newBooking: Booking = {
             id: crypto.randomUUID(),
+            stylistId: selectedStylist.id, // 🔥 key link
             stylistName: selectedStylist.name,
             stylistImage: selectedStylist.image,
             serviceName: bookingService.name,
@@ -293,9 +312,16 @@ const App: React.FC = () => {
       )}
 
       {currentScreen === Screen.STYLIST_DASHBOARD && (
-          <StylistDashboard 
-            userName={user.name}
-            onLogout={handleLogout}
+          // <StylistDashboard
+          //   userName={user.name}
+          //   onLogout={handleLogout}
+          // />
+
+          <StylistDashboard
+              userName={user.name}
+              stylistId={user.id}
+              bookings={bookings}
+              onLogout={handleLogout}
           />
       )}
     </div>

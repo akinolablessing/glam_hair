@@ -81,6 +81,7 @@ const StyleIdeaGenerator: React.FC = () => {
                     {formatIdeas(ideas)}
                 </div>
             )}
+
         </div>
     );
 };

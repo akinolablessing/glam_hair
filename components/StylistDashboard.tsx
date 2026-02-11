@@ -29,14 +29,23 @@ interface DayAvailability {
   end: string;
 }
 
-const StylistDashboard: React.FC<StylistDashboardProps> = ({ userName,stylistId, onLogout }) => {
+const StylistDashboard: React.FC<StylistDashboardProps> = ({ userName,
+                                                               stylistId,
+                                                               bookings,
+                                                               onLogout }) => {
 
 
-    const bookings = [
-        { id: 1, stylistId: '123', service: 'Classic Haircut', client: 'Amy Smith', time: 'Today, 2:00 PM', location: '123 Blossom Lane', status: 'upcoming' },
-        { id: 2, stylistId: '123', service: 'Full Color', client: 'Jessica Wu', time: 'Tomorrow, 10:00 AM', location: '456 Style Avenue', status: 'upcoming' }
-    ];
+    // const bookings = [
+    //     { id: 1, stylistId: '123', service: 'Classic Haircut', client: 'Amy Smith', time: 'Today, 2:00 PM', location: '123 Blossom Lane', status: 'upcoming' },
+    //     { id: 2, stylistId: '123', service: 'Full Color', client: 'Jessica Wu', time: 'Tomorrow, 10:00 AM', location: '456 Style Avenue', status: 'upcoming' }
+    // ];
 
+
+    // const stylistBookings = bookings.filter(
+    //     booking =>
+    //         booking.stylistId === stylistId &&
+    //         booking.status === 'upcoming'
+    // );
 
     const stylistBookings = bookings.filter(
         booking =>
@@ -107,25 +116,53 @@ const StylistDashboard: React.FC<StylistDashboardProps> = ({ userName,stylistId,
 
   // --- Renderers ---
 
-  const renderBookings = () => (
-    <div className="space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {bookings.map(booking => (
-        <div key={booking.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
-          <div>
-             <div className="flex items-center mb-1">
-                <h3 className="font-bold text-gray-800 mr-2">{booking.service}</h3>
-             </div>
-             <p className="text-sm text-gray-500">with <span className="text-gray-700 font-medium">{booking.client}</span></p>
-             <p className="text-xs text-gray-400 mt-1">{booking.location}</p>
-          </div>
-           <div className="text-right">
-             <span className="text-purple-700 font-bold text-xs bg-purple-50 px-2 py-1 rounded-md">{booking.time}</span>
-           </div>
+  // const renderBookings = () => (
+  //   <div className="space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-500">
+  //     {bookings.map(booking => (
+  //       <div key={booking.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
+  //         <div>
+  //            <div className="flex items-center mb-1">
+  //               <h3 className="font-bold text-gray-800 mr-2">{booking.service}</h3>
+  //            </div>
+  //            <p className="text-sm text-gray-500">with <span className="text-gray-700 font-medium">{booking.client}</span></p>
+  //            <p className="text-xs text-gray-400 mt-1">{booking.location}</p>
+  //         </div>
+  //          <div className="text-right">
+  //            <span className="text-purple-700 font-bold text-xs bg-purple-50 px-2 py-1 rounded-md">{booking.time}</span>
+  //          </div>
+  //       </div>
+  //     ))}
+  //     {bookings.length === 0 && <p className="text-center text-gray-400 mt-8">No upcoming bookings.</p>}
+  //   </div>
+  // );
+
+    const renderBookings = () => (
+        <div className="space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {stylistBookings.map(booking => (
+                <div
+                    key={booking.id}
+                    className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center"
+                >
+                    <div>
+                        <h3 className="font-bold text-gray-800">{booking.serviceName}</h3>
+                        <p className="text-sm text-gray-500">
+                            {new Date(booking.date).toLocaleDateString()} at {booking.time}
+                        </p>
+                    </div>
+
+                    <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-bold">
+          {booking.status}
+        </span>
+                </div>
+            ))}
+
+            {stylistBookings.length === 0 && (
+                <p className="text-center text-gray-400 mt-8">
+                    No upcoming bookings.
+                </p>
+            )}
         </div>
-      ))}
-      {bookings.length === 0 && <p className="text-center text-gray-400 mt-8">No upcoming bookings.</p>}
-    </div>
-  );
+    );
 
   const renderEarnings = () => {
     const weeklyData = [40, 70, 30, 85, 60, 20, 10]; // Mock percentages
